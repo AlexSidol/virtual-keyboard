@@ -42,6 +42,8 @@ function pushKeydown(evt) {
 
   renderDigitPanel(digit, evt.code, evt.type);
   renderFirstPanel(first, evt.code, evt.type);
+  renderSecondPanel(second, evt.code, evt.type);
+  renderThirdPanel(third, evt.code, evt.type);
   document.removeEventListener("keydown", pushKeydown);
   document.addEventListener("keyup", pushKeyup);
 }
@@ -50,6 +52,8 @@ function pushKeyup(evt) {
   console.log(evt);
   renderDigitPanel(digit, evt.code, evt.type);
   renderFirstPanel(first, evt.code, evt.type);
+  renderSecondPanel(second, evt.code, evt.type);
+  renderThirdPanel(third, evt.code, evt.type);
   document.removeEventListener("keyup", pushKeyup);
   document.addEventListener("keydown", pushKeydown);
 }
