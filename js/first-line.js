@@ -56,6 +56,14 @@ export const first = [
     view: "standart",
   },
   {
+    code: "KeyI",
+    keyBig: "I",
+    keySmall: "i",
+    keyBigUa: "Ш",
+    keySmallUa: "ш",
+    view: "standart",
+  },
+  {
     code: "KeyO",
     keyBig: "O",
     keySmall: "o",

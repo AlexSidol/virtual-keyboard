@@ -56,35 +56,62 @@ img {
   display: flex;
   flex-direction: column;
   align-items: center;
-  row-gap: 4px;
-  width: 670px;
+  row-gap: 6px;
+
+  width: 800px;
   outline: 1px dashed salmon;
+  border-radius: 4px;
   margin: 0 auto;
-  color: aliceblue;
-  background-color: aquamarine;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: #f1f1f1;
+  background-color: #edc7c8;
 }
 
 .keyboard__list {
   display: flex;
 
-  gap: 4px;
+  gap: 6px;
 }
-.keyboard__item {
+.keyboard__item,
+.special_item {
   display: flex;
-
   width: 40px;
   height: 40px;
   align-items: center;
   justify-content: center;
   border: 1px solid gray;
-  background-color: grey;
+  border-radius: 4px;
+  background-color: #aedeed;
 }
 
-.backspace {
-  width: 90px;
-  background-color: rgb(45, 44, 44);
+.special_item {
+  background-color: #9badb8;
+}
+
+.backspace,
+.capsLock,
+.shift-right {
+  width: 94px;
+  background-color: #9badb8;
+}
+
+.enter,
+.shift {
+  width: 86px;
+  background-color: #9badb8;
 }
 
 .del {
-  width: 60px;
+  width: 42px;
+  background-color: #9badb8;
+}
+
+.tab {
+  width: 46px;
+  background-color: #9badb8;
+}
+
+.space {
+  width: 322px;
 }

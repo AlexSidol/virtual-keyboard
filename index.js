@@ -1,5 +1,7 @@
 import { digit } from "./js/data.js";
 import { first } from "./js/first-line.js";
+import { second } from "./js/second-line.js";
+import { third } from "./js/third-line.js";
 
 const digitLineEl = document.querySelector("#digit-line");
 const firstLineEl = document.querySelector("#first-line");
@@ -63,15 +65,83 @@ function renderFirstPanel(arr, key, act) {
   }
   console.log(indicator);
 
-  const markupfirst =
+  const draft =
     arr
       .map((el) => {
         return `<li class="keyboard__item">${el[action]}</li>`;
       })
       .join("") + `<li class="keyboard__item del">Del</li>`;
 
-  const draft = `<li class="keyboard__item Tab">Tab</li>` + markupfirst;
-  firstLineEl.innerHTML = draft;
+  const markupfirst = `<li class="keyboard__item tab">Tab</li>` + draft;
+  firstLineEl.innerHTML = markupfirst;
 }
 
 renderFirstPanel(first);
+
+function renderSecondPanel(arr, key, act) {
+  //   console.log(key);
+
+  let action = act;
+  if ((key === "ShiftLeft" || key === "ShiftRight") && act === "keydown") {
+    action = "keyBig";
+  } else {
+    action = "keySmall";
+  }
+
+  const draft =
+    arr
+      .map((el) => {
+        return `<li class="keyboard__item">${el[action]}</li>`;
+      })
+      .join("") + `<li class="keyboard__item enter">Enter</li>`;
+
+  const markupsecond =
+    `<li class="keyboard__item capsLock">Caps Lock</li>` + draft;
+  secondLineEl.innerHTML = markupsecond;
+}
+
+renderSecondPanel(second);
+
+function renderThirdPanel(arr, key, act) {
+  //   console.log(key);
+
+  let action = act;
+  if ((key === "ShiftLeft" || key === "ShiftRight") && act === "keydown") {
+    action = "keyBig";
+  } else {
+    action = "keySmall";
+  }
+
+  const draft =
+    arr
+      .map((el) => {
+        return `<li class="keyboard__item">${el[action]}</li>`;
+      })
+      .join("") +
+    `<li class="keyboard__item erow">▲</li>` +
+    `<li class="keyboard__item shift">Shift</li>`;
+
+  const markupthird =
+    `<li class="keyboard__item shift-right">Shift</li>` + draft;
+  thirdLineEl.innerHTML = markupthird;
+}
+
+renderThirdPanel(third);
+
+function renderLastPanel() {
+  //   console.log(key);
+
+  const markuplast = `
+          <li class="special_item ctrl">Ctrl</li>
+          <li class="special_item ">"fn"</li>
+          <li class="special_item">"Alt"</li>
+          <li class="special_item space"></li>
+          <li class="special_item">Alt</li>
+          <li class="special_item">◀ </li>
+          <li class="special_item">▼</li>
+          <li class="special_item">▶</li>
+          <li class="special_item ctrl">Ctrl</li>`;
+
+  fourthLineEl.innerHTML = markuplast;
+}
+renderLastPanel();
