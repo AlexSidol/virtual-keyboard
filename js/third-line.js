@@ -57,7 +57,7 @@ export const third = [
   },
   {
     code: "Comma",
-    keyBig: ",",
+    keyBig: "<",
     keySmall: ",",
     keyBigUa: "Б",
     keySmallUa: "б",
@@ -65,7 +65,7 @@ export const third = [
   },
   {
     code: "Period",
-    keyBig: ".",
+    keyBig: ">",
     keySmall: ".",
     keyBigUa: "Ю",
     keySmallUa: "ю",
@@ -73,9 +73,9 @@ export const third = [
   },
   {
     code: "Slash",
-    keyBig: "/",
+    keyBig: "?",
     keySmall: "/",
-    keyBigUa: ".",
+    keyBigUa: ",",
     keySmallUa: ".",
     view: "standart",
   },

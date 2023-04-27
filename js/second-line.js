@@ -73,7 +73,7 @@ export const second = [
   },
   {
     code: "Semicolon",
-    keyBig: ";",
+    keyBig: ":",
     keySmall: ";",
     keyBigUa: "Ж",
     keySmallUa: "ж",
@@ -81,7 +81,7 @@ export const second = [
   },
   {
     code: "Quote",
-    keyBig: "'",
+    keyBig: '"',
     keySmall: "'",
     keyBigUa: "Є",
     keySmallUa: "є",
