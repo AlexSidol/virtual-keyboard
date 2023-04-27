@@ -7,7 +7,7 @@ body {
   font-family: "Ysabeau", sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   letter-spacing: 0.04em;
   margin: 0;
 
@@ -126,6 +126,7 @@ img {
   display: block;
   margin: 0 auto;
   width: 800px;
+  font-size: 2rem;
 
   resize: none;
 }

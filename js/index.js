@@ -11,9 +11,12 @@ import {
   renderLastPanel,
 } from "./keyboard-render.js";
 
+const keyboardEl = document.querySelector(".keyboard");
+
 document.addEventListener("keydown", pushKeydown);
-document.addEventListener("click", inputText);
+// document.addEventListener("click", inputText);
 document.addEventListener("keypress", pushSpecialKey);
+keyboardEl.addEventListener("click", inputText);
 
 renderDigitPanel(digit);
 renderFirstPanel(first);
@@ -24,8 +27,13 @@ renderLastPanel();
 const areaEl = document.querySelector("#area");
 
 function inputText(evt) {
-  // console.log("evt", evt);
-  // console.log("curTar", evt);
+  if (!evt.target.closest("li")) {
+    return;
+  } else {
+    let currentKey = evt.target.closest("li").innerHTML;
+    console.log("Проверка пройдена", currentKey);
+    areaEl.value += currentKey;
+  }
 }
 
 function pushSpecialKey(evt) {
