@@ -130,3 +130,7 @@ img {
 
   resize: none;
 }
+
+.active {
+  background-color: #2c7d6a;
+}

@@ -1,7 +1,7 @@
-import { digit } from "./data.js";
-import { first } from "./first-line.js";
-import { second } from "./second-line.js";
-import { third } from "./third-line.js";
+import { digit } from "./data/data.js";
+import { first } from "./data/first-line.js";
+import { second } from "./data/second-line.js";
+import { third } from "./data/third-line.js";
 
 import {
   renderDigitPanel,
@@ -16,7 +16,9 @@ const keyboardEl = document.querySelector(".keyboard");
 document.addEventListener("keydown", pushKeydown);
 // document.addEventListener("click", inputText);
 document.addEventListener("keypress", pushSpecialKey);
-keyboardEl.addEventListener("click", inputText);
+
+keyboardEl.addEventListener("mousedown", clickDown);
+keyboardEl.addEventListener("mouseup", clickUp);
 
 renderDigitPanel(digit);
 renderFirstPanel(first);
@@ -26,18 +28,71 @@ renderLastPanel();
 
 const areaEl = document.querySelector("#area");
 
-function inputText(evt) {
+function clickUp(evt) {
   if (!evt.target.closest("li")) {
     return;
-  } else {
-    let currentKey = evt.target.closest("li").innerHTML;
-    console.log("Проверка пройдена", currentKey);
-    areaEl.value += currentKey;
+  }
+  let currentKey = evt.target.closest("li").innerText;
+
+  if (evt.target.closest("li") && currentKey === "Caps Lock") {
+    return;
+  }
+  let currentLi = evt.target.closest("li");
+  if (currentLi.classList.contains("active")) {
+    currentLi.classList.remove("active");
   }
 }
 
+function clickDown(evt) {
+  if (!evt.target.closest("li")) {
+    return;
+  }
+  let currentKey = evt.target.closest("li").innerText;
+  let currentLi = evt.target.closest("li");
+
+  if (currentLi.classList.contains("active")) {
+    currentLi.classList.remove("active");
+  } else {
+    currentLi.classList.add("active");
+  }
+  let inputText = areaEl.value;
+  console.log(inputText);
+  switch (currentKey) {
+    case "":
+      areaEl.value += " ";
+      break;
+
+    case "Tab":
+      areaEl.value += "    ";
+      break;
+
+    case "Ctrl":
+      break;
+
+    case "Win":
+      break;
+
+    case "Alt":
+      break;
+
+    case "Backspace":
+      removeElBackspace();
+      break;
+
+    case "Caps Lock":
+      // потрібно викликати функцію
+      changeCapsLock(currentLi);
+      break;
+
+    default:
+      areaEl.value += currentKey;
+  }
+
+  // console.log(currentKey);
+}
+
 function pushSpecialKey(evt) {
-  // console.log("evt", evt);
+  console.log("evt", evt);
   // console.log("curTar", evt.currentTarget);
   if (evt.key === "Enter") {
     console.log("в if", areaEl.value);
@@ -76,4 +131,31 @@ export function checkKeys(key, act) {
     action = "keySmall";
   }
   return action;
+}
+
+function changeCapsLock(el) {
+  if (el.classList.contains("active")) {
+    console.log("відрендерити big літери");
+  } else {
+    console.log("відрендерити small літери");
+  }
+
+  // renderFirstPanel(first, evt.code, evt.type);
+  // renderSecondPanel(second, evt.code, evt.type);
+  // renderThirdPanel(third, evt.code, evt.type);
+}
+
+function removeElBackspace() {
+  let start = areaEl.selectionStart;
+
+  console.log("start", start);
+  let end = areaEl.selectionEnd;
+  console.log("end", end);
+  if (start === end && start > 0) {
+    let text = areaEl.value;
+    let newText = text.slice(0, start - 1) + text.slice(start);
+    areaEl.value = newText;
+    areaEl.selectionStart = start - 1;
+    areaEl.selectionEnd = start - 1;
+  }
 }
