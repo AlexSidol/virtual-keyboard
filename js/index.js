@@ -8,8 +8,15 @@ import {
   renderFirstPanel,
   renderSecondPanel,
   renderThirdPanel,
-  renderLastPanel,
 } from "./keyboard-render.js";
+
+import {
+  removeElBackspace,
+  deleteClickProcessing,
+  enterClickProcessing,
+  changeCapsLock,
+  shiftLeftClickProcessing,
+} from "./functionKeys.js";
 
 const keyboardEl = document.querySelector(".keyboard");
 
@@ -24,39 +31,45 @@ renderDigitPanel(digit);
 renderFirstPanel(first);
 renderSecondPanel(second);
 renderThirdPanel(third);
-renderLastPanel();
 
 const areaEl = document.querySelector("#area");
 
 function clickUp(evt) {
-  if (!evt.target.closest("li")) {
+  if (!evt.target.closest("span")) {
     return;
   }
-  let currentKey = evt.target.closest("li").innerText;
+  let currentKey = evt.target.closest("span").innerText;
 
-  if (evt.target.closest("li") && currentKey === "Caps Lock") {
+  if (evt.target.closest("span") && currentKey === "Caps Lock") {
     return;
   }
-  let currentLi = evt.target.closest("li");
-  if (currentLi.classList.contains("active")) {
-    currentLi.classList.remove("active");
+
+  let currentDIV = evt.target.closest("span");
+
+  if (currentDIV.classList.contains("active") && currentKey === "Shift") {
+    currentDIV.classList.remove("active");
+    shiftLeftClickProcessing(currentDIV);
+    return;
+  }
+  if (currentDIV.classList.contains("active")) {
+    currentDIV.classList.remove("active");
   }
 }
 
 function clickDown(evt) {
-  if (!evt.target.closest("li")) {
+  if (!evt.target.closest("span")) {
     return;
   }
-  let currentKey = evt.target.closest("li").innerText;
-  let currentLi = evt.target.closest("li");
+  let currentKey = evt.target.closest("span").innerText;
 
-  if (currentLi.classList.contains("active")) {
-    currentLi.classList.remove("active");
+  let currentDIV = evt.target.closest("span");
+
+  if (currentDIV.classList.contains("active")) {
+    currentDIV.classList.remove("active");
   } else {
-    currentLi.classList.add("active");
+    currentDIV.classList.add("active");
   }
-  let inputText = areaEl.value;
-  console.log(inputText);
+
   switch (currentKey) {
     case "":
       areaEl.value += " ";
@@ -80,8 +93,19 @@ function clickDown(evt) {
       break;
 
     case "Caps Lock":
-      // потрібно викликати функцію
-      changeCapsLock(currentLi);
+      changeCapsLock(currentDIV);
+      break;
+
+    case "Del":
+      deleteClickProcessing();
+      break;
+
+    case "Enter":
+      enterClickProcessing();
+      break;
+
+    case "Shift":
+      shiftLeftClickProcessing(currentDIV);
       break;
 
     default:
@@ -92,13 +116,18 @@ function clickDown(evt) {
 }
 
 function pushSpecialKey(evt) {
-  console.log("evt", evt);
-  // console.log("curTar", evt.currentTarget);
-  if (evt.key === "Enter") {
-    console.log("в if", areaEl.value);
-    areaEl.value += "\nf";
+  console.log("evt", evt.key);
+
+  let nowPushKey = evt.key;
+  light(arrkeysd, nowPushKey);
+
+  if (evt.key === "Enter" && evt.target === body) {
+    console.log("evt.currentTarget", evt.currentTarget);
+
+    areaEl.value += "\n";
+  } else if (evt.key === "Enter") {
+    return;
   } else {
-    console.log("вийшла з if");
     areaEl.value += evt.key;
   }
 }
@@ -123,39 +152,18 @@ export function pushKeyup(evt) {
   document.addEventListener("keydown", pushKeydown);
 }
 
-export function checkKeys(key, act) {
-  let action = "keySmall";
-  if ((key === "ShiftLeft" || key === "ShiftRight") && act === "keydown") {
-    action = "keyBig";
-  } else {
-    action = "keySmall";
-  }
-  return action;
-}
+const spanArray = document.getElementsByTagName("span");
 
-function changeCapsLock(el) {
-  if (el.classList.contains("active")) {
-    console.log("відрендерити big літери");
-  } else {
-    console.log("відрендерити small літери");
-  }
+let arrkeysd = [...spanArray];
 
-  // renderFirstPanel(first, evt.code, evt.type);
-  // renderSecondPanel(second, evt.code, evt.type);
-  // renderThirdPanel(third, evt.code, evt.type);
-}
+function light(array, PushEl) {
+  for (let index = 0; index < array.length; index += 1) {
+    const element = array[index].innerText.trim();
+    const htmlEl = array[index];
 
-function removeElBackspace() {
-  let start = areaEl.selectionStart;
-
-  console.log("start", start);
-  let end = areaEl.selectionEnd;
-  console.log("end", end);
-  if (start === end && start > 0) {
-    let text = areaEl.value;
-    let newText = text.slice(0, start - 1) + text.slice(start);
-    areaEl.value = newText;
-    areaEl.selectionStart = start - 1;
-    areaEl.selectionEnd = start - 1;
+    if (htmlEl.innerText.includes(PushEl) && PushEl === element) {
+      htmlEl.classList.add("active");
+      console.log("element", htmlEl.innerText);
+    }
   }
 }

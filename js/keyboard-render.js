@@ -1,74 +1,63 @@
-import { checkKeys } from "./index.js";
-
 const digitLineEl = document.querySelector("#digit-line");
 const firstLineEl = document.querySelector("#first-line");
 const secondLineEl = document.querySelector("#second-line");
 const thirdLineEl = document.querySelector("#third-line");
-const fourthLineEl = document.querySelector("#fourth-line");
+// const fourthLineEl = document.querySelector("#fourth-line");
 
-function createMarkup(arr, action) {
+function createMarkup(arr, key, act) {
+  let action = checkKeys(key, act);
   return arr
     .map((el) => {
-      return `<li class="keyboard__item">${el[action]}</li>`;
+      return `<span class="keyboard__item">${el[action]}</span>`;
     })
     .join("");
 }
 
 export function renderDigitPanel(arr, key, act) {
-  let action = checkKeys(key, act);
-
-  const markup =
-    createMarkup(arr, action) +
-    `<li class="keyboard__item backspace">Backspace</li>`;
-
-  digitLineEl.innerHTML = markup;
+  digitLineEl.innerHTML = createMarkup(arr, key, act);
 }
 
 export function renderFirstPanel(arr, key, act) {
-  let action = checkKeys(key, act);
-
-  const markupfirst =
-    `<li class="keyboard__item tab">Tab</li>` +
-    createMarkup(arr, action) +
-    `<li class="keyboard__item del">Del</li>`;
-
-  firstLineEl.innerHTML = markupfirst;
+  firstLineEl.innerHTML = createMarkup(arr, key, act);
 }
 
 export function renderSecondPanel(arr, key, act) {
-  let action = checkKeys(key, act);
-
-  const markupsecond =
-    `<li class="keyboard__item capsLock">Caps Lock</li>` +
-    createMarkup(arr, action) +
-    `<li class="keyboard__item enter">Enter</li>`;
-
-  secondLineEl.innerHTML = markupsecond;
+  secondLineEl.innerHTML = createMarkup(arr, key, act);
 }
 
 export function renderThirdPanel(arr, key, act) {
-  let action = checkKeys(key, act);
-
-  const markupthird =
-    `<li class="keyboard__item shift-right">Shift</li>` +
-    createMarkup(arr, action) +
-    `<li class="keyboard__item erow">▲</li>` +
-    `<li class="keyboard__item shift">Shift</li>`;
-
-  thirdLineEl.innerHTML = markupthird;
+  thirdLineEl.innerHTML = createMarkup(arr, key, act);
 }
 
-export function renderLastPanel() {
-  const markuplast = `
-            <li class="special_item ctrl">Ctrl</li>
-            <li class="special_item ">Win</li>
-            <li class="special_item">Alt</li>
-            <li class="special_item space">&#32;</li>
-            <li class="special_item">Alt</li>
-            <li class="special_item">◀ </li>
-            <li class="special_item">▼</li>
-            <li class="special_item">▶</li>
-            <li class="special_item ctrl">Ctrl</li>`;
+function checkKeys(key, act) {
+  let action = "keySmall";
 
-  fourthLineEl.innerHTML = markuplast;
+  // Перевірка на натискання на фізичній клаві SHIFT вниз
+  if ((key === "ShiftLeft" || key === "ShiftRight") && act === "keydown") {
+    action = "keyBig";
+  } else {
+    action = "keySmall";
+  }
+
+  // Перевірка на клік по віртуальній клаві CAPS LOCK
+  if (key === "Caps Lock" && act === "big") {
+    action = "keyBig";
+    return action;
+  }
+  if (key === "Caps Lock" && act === "small") {
+    action = "keySmall";
+    return action;
+  }
+
+  // Перевірка на клік по віртуальній клаві SHIFT
+  if (key === "Shift" && act === "big") {
+    action = "keyBig";
+    return action;
+  }
+  if (key === "Shift" && act === "small") {
+    action = "keySmall";
+    return action;
+  }
+
+  return action;
 }
