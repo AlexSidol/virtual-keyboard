@@ -119,7 +119,7 @@ function pushSpecialKey(evt) {
   console.log("evt", evt.key);
 
   let nowPushKey = evt.key;
-  light(arrkeysd, nowPushKey);
+  light(nowPushKey);
 
   if (evt.key === "Enter" && evt.target === body) {
     console.log("evt.currentTarget", evt.currentTarget);
@@ -139,6 +139,7 @@ export function pushKeydown(evt) {
   renderFirstPanel(first, evt.code, evt.type);
   renderSecondPanel(second, evt.code, evt.type);
   renderThirdPanel(third, evt.code, evt.type);
+  light();
   document.removeEventListener("keydown", pushKeydown);
   document.addEventListener("keyup", pushKeyup);
 }
@@ -152,18 +153,12 @@ export function pushKeyup(evt) {
   document.addEventListener("keydown", pushKeydown);
 }
 
-const spanArray = document.getElementsByTagName("span");
+function light(PushEl) {
+  const virtualButton = document.querySelector(`span[data-key="${PushEl}"]`);
 
-let arrkeysd = [...spanArray];
+  console.log(virtualButton);
 
-function light(array, PushEl) {
-  for (let index = 0; index < array.length; index += 1) {
-    const element = array[index].innerText.trim();
-    const htmlEl = array[index];
-
-    if (htmlEl.innerText.includes(PushEl) && PushEl === element) {
-      htmlEl.classList.add("active");
-      console.log("element", htmlEl.innerText);
-    }
+  if (virtualButton) {
+    virtualButton.classList.add("active"); // подсвечиваем кнопку
   }
 }

@@ -8,7 +8,7 @@ function createMarkup(arr, key, act) {
   let action = checkKeys(key, act);
   return arr
     .map((el) => {
-      return `<span class="keyboard__item">${el[action]}</span>`;
+      return `<span class="keyboard__item key" data-key=${el[action]}>${el[action]}</span>`;
     })
     .join("");
 }
