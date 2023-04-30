@@ -9,16 +9,16 @@ function createMarkup(arr, key, act, lang) {
   return arr
     .map((el) => {
       if (action === "small" && lang === "en") {
-        return `<span class="keyboard__item " data-key=${el.keySmall}>${el.keySmall}</span>`;
+        return `<span class="keyboard__item " data-code=${el.code}>${el.keySmall}</span>`;
       }
       if (action === "big" && lang === "en") {
-        return `<span class="keyboard__item " data-key=${el.keyBig}>${el.keyBig}</span>`;
+        return `<span class="keyboard__item " data-code=${el.code}>${el.keyBig}</span>`;
       }
       if (action === "small" && lang === "ua") {
-        return `<span class="keyboard__item " data-key=${el.keySmallUa}>${el.keySmallUa}</span>`;
+        return `<span class="keyboard__item " data-code=${el.code}>${el.keySmallUa}</span>`;
       }
       if (action === "big" && lang === "ua") {
-        return `<span class="keyboard__item " data-key=${el.keyBigUa}>${el.keyBigUa}</span>`;
+        return `<span class="keyboard__item " data-code=${el.code}>${el.keyBigUa}</span>`;
       }
     })
     .join("");

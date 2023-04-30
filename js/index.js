@@ -22,23 +22,29 @@ import {
   arrowDownProcessing,
 } from "./functionKeys.js";
 
-localStorage.setItem("lang", "en");
+if (localStorage.getItem("lang")) {
+  let lang = localStorage.getItem("lang");
+  renderDigitPanel(digit, null, null, lang);
+  renderFirstPanel(first, null, null, lang);
+  renderSecondPanel(second, null, null, lang);
+  renderThirdPanel(third, null, null, lang);
+} else {
+  let lang = "en";
+  localStorage.setItem("lang", "en");
+  renderDigitPanel(digit, null, null, lang);
+  renderFirstPanel(first, null, null, lang);
+  renderSecondPanel(second, null, null, lang);
+  renderThirdPanel(third, null, null, lang);
+}
 
 const keyboardEl = document.querySelector(".keyboard");
 
 document.addEventListener("keydown", pushKeydown);
-// document.addEventListener("click", inputText);
+
 document.addEventListener("keypress", pushSpecialKey);
 
 keyboardEl.addEventListener("mousedown", clickDown);
 keyboardEl.addEventListener("mouseup", clickUp);
-
-const lang = localStorage.getItem("lang");
-
-renderDigitPanel(digit, null, null, lang);
-renderFirstPanel(first, null, null, lang);
-renderSecondPanel(second, null, null, lang);
-renderThirdPanel(third, null, null, lang);
 
 const areaEl = document.querySelector("#area");
 
@@ -140,12 +146,16 @@ function clickDown(evt) {
 }
 
 function pushSpecialKey(evt) {
-  console.log("evt", evt.key);
+  console.log("evt", evt.code);
 
-  let nowPushKey = evt.key;
+  let nowPushKey = evt.code;
   light(nowPushKey, "down");
   console.log("evt.currentTarget", evt.currentTarget);
   console.log("evt.target", evt.target);
+  const virtualButton = document.querySelector(`span[data-code="${evt.code}"]`);
+
+  let virtualLetter = virtualButton.innerText;
+
   if (evt.key === "Enter" && evt.target === body) {
     // console.log("evt.currentTarget", evt.currentTarget);
 
@@ -153,7 +163,7 @@ function pushSpecialKey(evt) {
   } else if (evt.key === "Enter") {
     return;
   } else {
-    areaEl.value += evt.key;
+    areaEl.value += virtualLetter;
   }
 }
 
@@ -166,13 +176,16 @@ export function pushKeydown(evt) {
 
   light(evt.code, "down");
 
+  // console.log("virtualButton.innerText", virtualButton.innerText);
   if (
     (evt.code === "ControlLeft" && evt.altKey) ||
     (evt.code === "AltLeft" && evt.ctrlKey)
   ) {
     langSwitch();
   }
-  // document.removeEventListener("keydown", pushKeydown);
+
+  const virtualButton = document.querySelector(`span[data-code="${evt.code}"]`);
+
   document.addEventListener("keyup", pushKeyup);
   switch (evt.key) {
     case "":
@@ -197,7 +210,16 @@ export function pushKeydown(evt) {
       break;
 
     case "CapsLock":
-      // changeCapsLock(currentDIV);
+      console.log(virtualButton);
+      if (virtualButton.classList.contains("active")) {
+        console.log("If VB", virtualButton);
+        virtualButton.classList.remove("active");
+        changeCapsLock(virtualButton);
+      } else {
+        console.log("else VB", virtualButton);
+        virtualButton.classList.add("active");
+        changeCapsLock(virtualButton);
+      }
       break;
 
     case "Delete":
@@ -209,7 +231,7 @@ export function pushKeydown(evt) {
       break;
 
     case "Shift":
-      // shiftLeftClickProcessing(currentDIV);
+      shiftLeftClickProcessing(virtualButton);
       break;
 
     case "ArrowLeft":
@@ -235,7 +257,13 @@ export function pushKeydown(evt) {
 
 export function pushKeyup(evt) {
   const lang = localStorage.getItem("lang");
+  const virtualButton = document.querySelector(`span[data-code="${evt.code}"]`);
+  let currentKey = virtualButton.innerText;
+  if (virtualButton && currentKey === "Caps Lock") {
+    return;
+  }
 
+  console.log("cmvkddmmm");
   renderDigitPanel(digit, evt.code, evt.type, lang);
   renderFirstPanel(first, evt.code, evt.type, lang);
   renderSecondPanel(second, evt.code, evt.type, lang);
@@ -248,10 +276,11 @@ export function pushKeyup(evt) {
 }
 
 function light(PushEl, position) {
-  const virtualButton = document.querySelector(`span[data-key="${PushEl}"]`);
+  const virtualButton = document.querySelector(`span[data-code="${PushEl}"]`);
 
-  // console.log(virtualButton);
-
+  if (PushEl === "CapsLock") {
+    return;
+  }
   if (virtualButton && position === "down") {
     virtualButton.classList.add("active"); // подсвечиваем кнопку
     return;
