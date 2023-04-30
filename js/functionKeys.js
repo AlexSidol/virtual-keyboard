@@ -13,35 +13,34 @@ import {
 const areaEl = document.querySelector("#area");
 
 export function changeCapsLock(el) {
+  const lang = localStorage.getItem("lang");
   if (el.classList.contains("active")) {
     // console.log("відрендерити big літери");
-    renderFirstPanel(first, "Caps Lock", "big");
-    renderSecondPanel(second, "Caps Lock", "big");
-    renderThirdPanel(third, "Caps Lock", "big");
+    renderFirstPanel(first, "Caps Lock", "big", lang);
+    renderSecondPanel(second, "Caps Lock", "big", lang);
+    renderThirdPanel(third, "Caps Lock", "big", lang);
   } else {
     // console.log("відрендерити small літери");
-    renderFirstPanel(first, "Caps Lock", "small");
-    renderSecondPanel(second, "Caps Lock", "small");
-    renderThirdPanel(third, "Caps Lock", "small");
+    renderFirstPanel(first, "Caps Lock", "small", lang);
+    renderSecondPanel(second, "Caps Lock", "small", lang);
+    renderThirdPanel(third, "Caps Lock", "small", lang);
   }
 }
 
 export function shiftLeftClickProcessing(el) {
-  // console.log('el :>> ', el);
-  // console.log('el.classList.contains("active") :>> ', el.classList.contains("active"));
-  // console.log("I clicked on the SHIFT");
+  const lang = localStorage.getItem("lang");
   if (el.classList.contains("active")) {
     // console.log("відрендерити big літери");
-    renderDigitPanel(digit, "Shift", "big");
-    renderFirstPanel(first, "Shift", "big");
-    renderSecondPanel(second, "Shift", "big");
-    renderThirdPanel(third, "Shift", "big");
+    renderDigitPanel(digit, "Shift", "big", lang);
+    renderFirstPanel(first, "Shift", "big", lang);
+    renderSecondPanel(second, "Shift", "big", lang);
+    renderThirdPanel(third, "Shift", "big", lang);
   } else {
     // console.log("відрендерити small літери");
-    renderDigitPanel(digit, "Shift", "small");
-    renderFirstPanel(first, "Shift", "small");
-    renderSecondPanel(second, "Shift", "small");
-    renderThirdPanel(third, "Shift", "small");
+    renderDigitPanel(digit, "Shift", "small", lang);
+    renderFirstPanel(first, "Shift", "small", lang);
+    renderSecondPanel(second, "Shift", "small", lang);
+    renderThirdPanel(third, "Shift", "small", lang);
   }
 }
 

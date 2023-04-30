@@ -144,7 +144,8 @@ function pushSpecialKey(evt) {
 
   let nowPushKey = evt.key;
   light(nowPushKey, "down");
-
+  console.log("evt.currentTarget", evt.currentTarget);
+  console.log("evt.target", evt.target);
   if (evt.key === "Enter" && evt.target === body) {
     // console.log("evt.currentTarget", evt.currentTarget);
 
@@ -262,15 +263,12 @@ function light(PushEl, position) {
 
 function langSwitch() {
   const lang = localStorage.getItem("lang");
-  // console.log(lang);
 
   if (lang === "en") {
-    console.log("I switch to Ukrainian");
     localStorage.setItem("lang", "ua");
     return;
   }
   if (lang === "ua") {
-    console.log("I switch to English");
     localStorage.setItem("lang", "en");
     return;
   }
