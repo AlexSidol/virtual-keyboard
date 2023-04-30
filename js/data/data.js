@@ -4,7 +4,7 @@ export const digit = [
     keyBig: "~",
     keySmall: "`",
     keyBigUa: "₴",
-    keySmallUa: "'",
+    keySmallUa: "&apos;",
     view: "standart",
   },
   {
@@ -20,7 +20,7 @@ export const digit = [
     keySmall: "2",
     keyBig: "@",
     keySmallUa: "2",
-    keyBigUa: '"',
+    keyBigUa: "&quot;",
     view: "standart",
   },
   {

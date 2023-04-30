@@ -85,3 +85,23 @@ export function enterClickProcessing() {
     areaEl.selectionEnd = start + 1;
   }
 }
+
+// Press Arrow Left
+export function arrowLeftProcessing() {
+  // write code here
+}
+
+// Press Arrow Right
+export function arrowRightProcessing() {
+  // write code here
+}
+
+// Press Arrow Up
+export function arrowUpProcessing() {
+  // write code here
+}
+
+// Press Arrow Down
+export function arrowDownProcessing() {
+  // write code here
+}

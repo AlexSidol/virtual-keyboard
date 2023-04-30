@@ -44,7 +44,7 @@ export const first = [
     keyBig: "Y",
     keySmall: "y",
     keyBigUa: "Н",
-    keySmallUa: "Н",
+    keySmallUa: "н",
     view: "standart",
   },
   {
