@@ -13,44 +13,64 @@ import {
 const areaEl = document.querySelector("#area");
 
 export function changeCapsLock(el) {
-  const lang = localStorage.getItem("lang");
   if (el.classList.contains("active")) {
-    // console.log("відрендерити big літери");
-    renderFirstPanel(first, "Caps Lock", "big", lang);
-    renderSecondPanel(second, "Caps Lock", "big", lang);
-    renderThirdPanel(third, "Caps Lock", "big", lang);
+    localStorage.setItem("letterCase", "UPPERCASE");
+    renderFirstPanel(first);
+    renderSecondPanel(second);
+    renderThirdPanel(third);
   } else {
-    // console.log("відрендерити small літери");
-    renderFirstPanel(first, "Caps Lock", "small", lang);
-    renderSecondPanel(second, "Caps Lock", "small", lang);
-    renderThirdPanel(third, "Caps Lock", "small", lang);
+    localStorage.setItem("letterCase", "lowercase");
+    renderFirstPanel(first);
+    renderSecondPanel(second);
+    renderThirdPanel(third);
+  }
+}
+
+export function changeCapsLockClick(el) {
+  if (localStorage.getItem("letterCase") === "lowercase") {
+    localStorage.setItem("letterCase", "UPPERCASE");
+    el.classList.add("active");
+
+    renderFirstPanel(first);
+    renderSecondPanel(second);
+    renderThirdPanel(third);
+  } else {
+    localStorage.setItem("letterCase", "lowercase");
+    el.classList.remove("active");
+
+    renderFirstPanel(first);
+    renderSecondPanel(second);
+    renderThirdPanel(third);
   }
 }
 
 export function shiftLeftClickProcessing(el) {
   const lang = localStorage.getItem("lang");
-  if (el.classList.contains("active")) {
-    // console.log("відрендерити big літери");
-    renderDigitPanel(digit, "Shift", "big", lang);
-    renderFirstPanel(first, "Shift", "big", lang);
-    renderSecondPanel(second, "Shift", "big", lang);
-    renderThirdPanel(third, "Shift", "big", lang);
+  if (
+    el.classList.contains("active") ||
+    localStorage.getItem("letterCase") === "UPPERCASE"
+  ) {
+    renderDigitPanel(digit);
+    renderFirstPanel(first);
+    renderSecondPanel(second);
+    renderThirdPanel(third);
   } else {
-    // console.log("відрендерити small літери");
-    renderDigitPanel(digit, "Shift", "small", lang);
-    renderFirstPanel(first, "Shift", "small", lang);
-    renderSecondPanel(second, "Shift", "small", lang);
-    renderThirdPanel(third, "Shift", "small", lang);
+    renderDigitPanel(digit);
+    renderFirstPanel(first);
+    renderSecondPanel(second);
+    renderThirdPanel(third);
   }
 }
 
-export function removeElBackspace() {
+export function removeElBackspace(evt) {
   let start = areaEl.selectionStart;
 
-  // console.log("start", start);
   let end = areaEl.selectionEnd;
-  // console.log("end", end);
-  if (start === end && start > 0) {
+  if (start === end && start > 0 && evt) {
+    return;
+  }
+
+  if (start === end && start > 0 && !evt) {
     let text = areaEl.value;
     let newText = text.slice(0, start - 1) + text.slice(start);
     areaEl.value = newText;
@@ -60,12 +80,23 @@ export function removeElBackspace() {
 }
 
 // click DEL
-export function deleteClickProcessing() {
+export function deleteClickProcessing(evt) {
   let start = areaEl.selectionStart;
   let end = areaEl.selectionEnd;
+
   if (start === end && start > 0) {
     let text = areaEl.value;
     let newText = text.slice(0, start) + text.slice(start + 1);
+    areaEl.value = newText;
+    areaEl.selectionStart = start;
+    areaEl.selectionEnd = start;
+  }
+
+  if (start !== end) {
+    let text = areaEl.value;
+    let newText = text.slice(0, start) + text.slice(end);
+    // let newText = text.slice(start, end);
+    evt.preventDefault();
     areaEl.value = newText;
     areaEl.selectionStart = start;
     areaEl.selectionEnd = start;
@@ -85,22 +116,33 @@ export function enterClickProcessing() {
   }
 }
 
-// Press Arrow Left
-export function arrowLeftProcessing() {
-  // write code here
+export function spaceClickProcessing(evt) {
+  let start = areaEl.selectionStart;
+  if (start !== areaEl.value.length) {
+    let text = areaEl.value;
+    let newText = text.slice(0, start) + " " + text.slice(start);
+    evt.preventDefault();
+    areaEl.value = newText;
+    areaEl.selectionStart = start + 1;
+    areaEl.selectionEnd = start + 1;
+  } else {
+    areaEl.value += " ";
+    evt.preventDefault();
+  }
 }
 
-// Press Arrow Right
-export function arrowRightProcessing() {
-  // write code here
-}
+export function tabClickProcessing(evt) {
+  let start = areaEl.selectionStart;
 
-// Press Arrow Up
-export function arrowUpProcessing() {
-  // write code here
-}
-
-// Press Arrow Down
-export function arrowDownProcessing() {
-  // write code here
+  if (start !== areaEl.value.length) {
+    let text = areaEl.value;
+    let newText = text.slice(0, start) + "    " + text.slice(start);
+    evt.preventDefault();
+    areaEl.value = newText;
+    areaEl.selectionStart = start + 4;
+    areaEl.selectionEnd = start + 4;
+  } else {
+    areaEl.value += "    ";
+    evt.preventDefault();
+  }
 }

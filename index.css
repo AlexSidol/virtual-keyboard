@@ -61,7 +61,6 @@ img {
   row-gap: 6px;
 
   width: 800px;
-  outline: 1px dashed salmon;
   border-radius: 4px;
   margin: 0 auto;
   padding-top: 20px;
@@ -82,11 +81,16 @@ img {
   height: 40px;
   align-items: center;
   justify-content: center;
-  border: 1px solid #aedeed;
   border-radius: 4px;
 
   background-color: #93c5d4;
-  box-shadow: inset 0px 5px 10px 0px rgba(110, 109, 109, 0.5);
+  /* box-shadow: inset 0px 5px 10px 0px rgba(130, 128, 128, 0.5); */
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.7);
+}
+
+.keyboard__item:hover,
+.special_item:hover {
+  background-color: #abc9d3;
 }
 
 .special_item {
@@ -138,5 +142,10 @@ img {
   /* background-color: #6795a3; */
   background-color: #aedeed;
   transform: translateY(1px);
-  /* box-shadow: inset 0px 10px 20px 2px rgba(0, 0, 0, 0.25); */
+  box-shadow: inset 0px 5px 10px 0px rgba(0, 0, 0, 0.7);
+}
+
+.text-info {
+  margin-top: 20px;
+  text-align: center;
 }

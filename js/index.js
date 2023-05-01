@@ -16,33 +16,36 @@ import {
   enterClickProcessing,
   changeCapsLock,
   shiftLeftClickProcessing,
-  arrowLeftProcessing,
-  arrowRightProcessing,
-  arrowUpProcessing,
-  arrowDownProcessing,
+  spaceClickProcessing,
+  tabClickProcessing,
+  changeCapsLockClick,
 } from "./functionKeys.js";
 
-if (localStorage.getItem("lang")) {
-  let lang = localStorage.getItem("lang");
-  renderDigitPanel(digit, null, null, lang);
-  renderFirstPanel(first, null, null, lang);
-  renderSecondPanel(second, null, null, lang);
-  renderThirdPanel(third, null, null, lang);
-} else {
-  let lang = "en";
+if (!localStorage.getItem("lang")) {
   localStorage.setItem("lang", "en");
-  renderDigitPanel(digit, null, null, lang);
-  renderFirstPanel(first, null, null, lang);
-  renderSecondPanel(second, null, null, lang);
-  renderThirdPanel(third, null, null, lang);
 }
+if (
+  !localStorage.getItem("digitCase") ||
+  localStorage.getItem("digitCase") !== "lowercase"
+) {
+  localStorage.setItem("digitCase", "lowercase");
+}
+if (
+  !localStorage.getItem("letterCase") ||
+  localStorage.getItem("letterCase") !== "lowercase"
+) {
+  localStorage.setItem("letterCase", "lowercase");
+}
+
+renderDigitPanel(digit);
+renderFirstPanel(first);
+renderSecondPanel(second);
+renderThirdPanel(third);
 
 const keyboardEl = document.querySelector(".keyboard");
 
 document.addEventListener("keydown", pushKeydown);
-
 document.addEventListener("keypress", pushSpecialKey);
-
 keyboardEl.addEventListener("mousedown", clickDown);
 keyboardEl.addEventListener("mouseup", clickUp);
 
@@ -61,12 +64,24 @@ function clickUp(evt) {
   let currentDIV = evt.target.closest("span");
 
   if (currentDIV.classList.contains("active") && currentKey === "Shift") {
+    const virtualCapsLock = document.querySelector(
+      `span[data-code="CapsLock"]`
+    );
+    if (virtualCapsLock.classList.contains("active")) {
+      localStorage.setItem("letterCase", "UPPERCASE");
+      shiftLeftClickProcessing(currentDIV);
+    }
     currentDIV.classList.remove("active");
+    localStorage.setItem("digitCase", "lowercase");
+    localStorage.setItem("letterCase", "lowercase");
     shiftLeftClickProcessing(currentDIV);
     return;
   }
+
   if (currentDIV.classList.contains("active")) {
-    currentDIV.classList.remove("active");
+    if (currentKey !== "Caps Lock") {
+      currentDIV.classList.remove("active");
+    }
   }
 }
 
@@ -79,9 +94,13 @@ function clickDown(evt) {
   let currentDIV = evt.target.closest("span");
 
   if (currentDIV.classList.contains("active")) {
-    currentDIV.classList.remove("active");
+    if (currentKey !== "Caps Lock" || currentKey !== "Shift") {
+      currentDIV.classList.remove("active");
+    }
   } else {
-    currentDIV.classList.add("active");
+    if (currentKey !== "Caps Lock" || currentKey !== "Shift") {
+      currentDIV.classList.add("active");
+    }
   }
 
   switch (currentKey) {
@@ -107,7 +126,7 @@ function clickDown(evt) {
       break;
 
     case "Caps Lock":
-      changeCapsLock(currentDIV);
+      changeCapsLockClick(currentDIV);
       break;
 
     case "Del":
@@ -119,64 +138,76 @@ function clickDown(evt) {
       break;
 
     case "Shift":
+      localStorage.setItem("digitCase", "UPPERCASE");
+      localStorage.setItem("letterCase", "UPPERCASE");
       shiftLeftClickProcessing(currentDIV);
+
+      const virtualCapsLock = document.querySelector(
+        `span[data-code="CapsLock"]`
+      );
+      if (virtualCapsLock.classList.contains("active")) {
+        localStorage.setItem("letterCase", "lowercase");
+        shiftLeftClickProcessing(currentDIV);
+      }
       break;
 
     case "◀":
-      arrowLeftProcessing();
+      areaEl.value += "◀";
       break;
 
     case "▶":
-      arrowRightProcessing();
+      areaEl.value += "▶";
       break;
 
     case "▲":
-      arrowUpProcessing();
+      areaEl.value += "▲";
       break;
 
     case "▼":
-      arrowDownProcessing();
+      areaEl.value += "▼";
       break;
 
     default:
       areaEl.value += currentKey;
   }
-
-  // console.log(currentKey);
 }
 
 function pushSpecialKey(evt) {
-  console.log("evt", evt.code);
-
   let nowPushKey = evt.code;
   light(nowPushKey, "down");
-  console.log("evt.currentTarget", evt.currentTarget);
-  console.log("evt.target", evt.target);
+
   const virtualButton = document.querySelector(`span[data-code="${evt.code}"]`);
 
   let virtualLetter = virtualButton.innerText;
 
   if (evt.key === "Enter" && evt.target === body) {
-    // console.log("evt.currentTarget", evt.currentTarget);
-
     areaEl.value += "\n";
   } else if (evt.key === "Enter") {
     return;
   } else {
-    areaEl.value += virtualLetter;
+    let start = areaEl.selectionStart;
+    if (start !== areaEl.value.length) {
+      let text = areaEl.value;
+      let newText = text.slice(0, start) + virtualLetter + text.slice(start);
+      evt.preventDefault();
+      areaEl.value = newText;
+      areaEl.selectionStart = start + 1;
+      areaEl.selectionEnd = start + 1;
+    } else {
+      areaEl.value += virtualLetter;
+      evt.preventDefault();
+    }
   }
 }
 
 export function pushKeydown(evt) {
-  const lang = localStorage.getItem("lang");
-  renderDigitPanel(digit, evt.code, evt.type, lang);
-  renderFirstPanel(first, evt.code, evt.type, lang);
-  renderSecondPanel(second, evt.code, evt.type, lang);
-  renderThirdPanel(third, evt.code, evt.type, lang);
+  renderDigitPanel(digit);
+  renderFirstPanel(first);
+  renderSecondPanel(second);
+  renderThirdPanel(third);
 
   light(evt.code, "down");
 
-  // console.log("virtualButton.innerText", virtualButton.innerText);
   if (
     (evt.code === "ControlLeft" && evt.altKey) ||
     (evt.code === "AltLeft" && evt.ctrlKey)
@@ -187,13 +218,16 @@ export function pushKeydown(evt) {
   const virtualButton = document.querySelector(`span[data-code="${evt.code}"]`);
 
   document.addEventListener("keyup", pushKeyup);
-  switch (evt.key) {
-    case "":
-      areaEl.value += " ";
+
+  switch (evt.code) {
+    case "Space":
+      evt.preventDefault();
+      spaceClickProcessing(evt);
       break;
 
     case "Tab":
-      areaEl.value += "    ";
+      evt.preventDefault();
+      tabClickProcessing(evt);
       break;
 
     case "Control":
@@ -206,48 +240,41 @@ export function pushKeydown(evt) {
       break;
 
     case "Backspace":
-      removeElBackspace();
+      removeElBackspace(evt);
       break;
 
     case "CapsLock":
-      console.log(virtualButton);
       if (virtualButton.classList.contains("active")) {
-        console.log("If VB", virtualButton);
         virtualButton.classList.remove("active");
         changeCapsLock(virtualButton);
       } else {
-        console.log("else VB", virtualButton);
         virtualButton.classList.add("active");
         changeCapsLock(virtualButton);
       }
       break;
 
     case "Delete":
-      deleteClickProcessing();
+      evt.preventDefault();
+      deleteClickProcessing(evt);
       break;
 
     case "Enter":
+      evt.preventDefault();
       enterClickProcessing();
       break;
 
-    case "Shift":
+    case "ShiftLeft":
+      localStorage.setItem("digitCase", "UPPERCASE");
+      localStorage.setItem("letterCase", "UPPERCASE");
       shiftLeftClickProcessing(virtualButton);
-      break;
 
-    case "ArrowLeft":
-      arrowLeftProcessing();
-      break;
-
-    case "ArrowRight":
-      arrowRightProcessing();
-      break;
-
-    case "ArrowUp":
-      arrowUpProcessing();
-      break;
-
-    case "ArrowDown":
-      arrowDownProcessing();
+      const virtualCapsLock = document.querySelector(
+        `span[data-code="CapsLock"]`
+      );
+      if (virtualCapsLock.classList.contains("active")) {
+        localStorage.setItem("letterCase", "lowercase");
+        shiftLeftClickProcessing(virtualButton);
+      }
       break;
 
     default:
@@ -256,22 +283,38 @@ export function pushKeydown(evt) {
 }
 
 export function pushKeyup(evt) {
-  const lang = localStorage.getItem("lang");
   const virtualButton = document.querySelector(`span[data-code="${evt.code}"]`);
   let currentKey = virtualButton.innerText;
-  if (virtualButton && currentKey === "Caps Lock") {
+
+  evt.preventDefault();
+
+  if (evt.code === "ShiftLeft" || evt.code === "ShiftRight") {
+    const CapsLockEl = document.querySelector(`span[data-code="CapsLock"]`);
+    if (CapsLockEl.classList.contains("active")) {
+      const ShiftLeftEl = document.querySelector(`span[data-code="ShiftLeft"]`);
+      ShiftLeftEl.classList.remove("active");
+
+      localStorage.setItem("letterCase", "UPPERCASE");
+      localStorage.setItem("digitCase", "lowercase");
+      shiftLeftClickProcessing(virtualButton);
+      return;
+    }
+
+    localStorage.setItem("letterCase", "lowercase");
+    localStorage.setItem("digitCase", "lowercase");
+  }
+
+  if (virtualButton && currentKey === "CapsLock") {
     return;
   }
 
-  console.log("cmvkddmmm");
-  renderDigitPanel(digit, evt.code, evt.type, lang);
-  renderFirstPanel(first, evt.code, evt.type, lang);
-  renderSecondPanel(second, evt.code, evt.type, lang);
-  renderThirdPanel(third, evt.code, evt.type, lang);
+  renderDigitPanel(digit);
+  renderFirstPanel(first);
+  renderSecondPanel(second);
+  renderThirdPanel(third);
   // -----------------------------------------------
 
   light(evt.code, "up");
-  // document.removeEventListener("keyup", pushKeyup);
   document.addEventListener("keydown", pushKeydown);
 }
 
