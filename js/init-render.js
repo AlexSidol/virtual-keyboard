@@ -48,8 +48,6 @@ const initialMarkup = `
   <span class="special_item ctrl" data-code="ControlRight">Ctrl</span>
 </div>
 </section>
-<p class="text-info">The keyboard was created in the Windows operating system</p>
-<p class="text-info">To switch language combination: left ctr + alt</p>
 </main>
 `;
 
