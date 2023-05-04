@@ -1,0 +1,151 @@
+html {
+  scroll-behavior: smooth;
+  font-size: 10px;
+}
+
+body {
+  font-family: "Ysabeau", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.8rem;
+  letter-spacing: 0.04em;
+  margin: 0;
+
+  background-color: #ffffff;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.title {
+  text-align: center;
+}
+
+.container {
+  margin: 0 auto;
+  padding: 0 15px;
+  max-width: 1200px;
+}
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 6px;
+
+  width: 800px;
+  border-radius: 4px;
+  margin: 0 auto;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: #fff;
+  background-color: #edc7c8;
+}
+
+.keyboard__list {
+  display: flex;
+
+  gap: 6px;
+}
+.keyboard__item,
+.special_item {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+
+  background-color: #93c5d4;
+  /* box-shadow: inset 0px 5px 10px 0px rgba(130, 128, 128, 0.5); */
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.7);
+}
+
+.keyboard__item:hover,
+.special_item:hover {
+  background-color: #abc9d3;
+}
+
+.special_item {
+  background-color: #9badb8;
+}
+
+.backspace,
+.capsLock,
+.shift-right {
+  width: 94px;
+  background-color: #9badb8;
+}
+
+.enter,
+.shift {
+  width: 86px;
+  background-color: #9badb8;
+}
+
+.del {
+  width: 42px;
+  background-color: #9badb8;
+}
+
+.tab {
+  width: 46px;
+  background-color: #9badb8;
+}
+
+.space {
+  width: 324px;
+}
+
+.screen {
+  padding: 30px;
+}
+
+.screen__area {
+  display: block;
+  margin: 0 auto;
+  width: 800px;
+  font-size: 2rem;
+
+  resize: none;
+}
+
+.active {
+  /* background-color: #ddd7ec; */
+  /* background-color: #6795a3; */
+  background-color: #aedeed;
+  transform: translateY(1px);
+  box-shadow: inset 0px 5px 10px 0px rgba(0, 0, 0, 0.7);
+}
+
+.text-info {
+  margin-top: 20px;
+  text-align: center;
+}
